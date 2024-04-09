@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/index.css') }}"> -->
+<style>
+body{
+    background: #5B5A5B
+}
+img{
+    border: 3px solid orange;
+    padding: 5px;
+}
+p{
+    color: white;
+}
+label{
+    color: white;
+}
+.center { 
+    height: 650px;
+    position: relative;
+}
+
+.center form {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+</style>
+</head>
+<body>
+
+    <div>
+        {% if path == None %}
+
+          <div class="center">
+                        <form action="/process" method="post" style="text-align: center;">
+                            <label for="id" style="margin-top: 20px; margin-bottom: 20px;">Patient Id &nbsp;&nbsp;</label>
+                            <input type="number" list="patientid" name="name" min="1" max="322" style="width: 300px;"/>
+                            <datalist id="patientid">
+                                {% for i in range(1, 323) %}
+                                <option value="{{i}}">{{i}}</option>
+                                {% endfor %}
+                            </datalist> &nbsp;&nbsp;
+                            <input type="submit" value="submit"><br />
+                            <a href="/logout" class="btn btn-primary">Logout</a>
+                        </form>
+
+                </div>
+        {% else %}
+            <div class="container">
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-sm-12" style="text-align: center;">
+                            <form action="/process" method="post">
+                                <label for="id" style="margin-top: 20px; margin-bottom: 20px;">Patient Id &nbsp;&nbsp;</label>
+                                <input type="number" list="patientid" name="name" min="1" max="322" style="width: 300px;"/>
+                                <datalist id="patientid">
+                                    {% for i in range(1, 323) %}
+                                    <option value="{{i}}">{{i}}</option>
+                                    {% endfor %}
+                                </datalist> &nbsp;&nbsp;
+                                <input type="submit" value="submit"><br />
+                                <a href="/logout" class="btn btn-primary" style="margin-bottom: 20px;">Logout</a>
+                            </form>
+                    </div>
+                </div>
+
+        <div class="row">
+                <div style="text-align: center;">
+                             <div id="original_image_border">
+                                 <p id="patient_id_text">Patient id = {{path}}</p>
+                                 {% set path = url_for('static',filename='original/{}.png'.format(path)) %}
+                                 <img src = "{{ path }}" alt="originl image" style="height: 300px; width: 300px;"/>
+                             </div>
+                 </div>
+        </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-6" style="text-align: center;">
+                <div id="enhanced_image">
+                    <p>Enhanced Image</p>
+                    <img src="{{ url_for('static',filename='enhanced/1.png') }}" alt="enhanced" style="height: 300px; width: 300px;">
+                </div>
+        </div>
+        <div class="col-sm-6" style="text-align: center;">
+            <div id="segmented_image">
+                <p>Segmented image</p>
+                <img src="{{ url_for('static',filename='segmented/1.png') }}" alt="removed label image" style="height: 300px; width: 300px;"> 
+                <!-- TODO -->
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-12" id="predicted_values" style="margin-top: 20px;">
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                        <p style="color: orange;">Tumour type&nbsp;:</p>
+                </div>
+                <div class="col-sm-2" style="color: white;">{{pType}}</div>
+                <div class="col-sm-2" style="color: white;">{{pType1}}</div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                        <p style="color: orange;">Background tissue&nbsp;:</p>
+                </div>
+                <div class="col-sm-2" style="color: white;">{{pBack}}</div>
+                <div class="col-sm-2" style="color: white;">{{pBack1}}</div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                        <p style="color: orange;">Deformity&nbsp;:</p>
+                </div>
+                <div class="col-sm-2" style="color: white;">{{pAbnorm}}</div>
+                <div class="col-sm-2" style="color: white;">{{pAbnorm1}}</div>
+                <div class="col-sm-3"></div>
+            </div>
+            <!-- <div id="predicted_values">
+                <p style="text-align: center;">Predicted value</p>
+                <p>Tumour type&nbsp;:{{pType}}</p>
+                <p>Background tissue&nbsp;:{{pBack}}</p>
+                <p>Deformity&nbsp;:{{pAbnorm}}</p>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+        {% endif %}
+    </div>
+</body>
+</html>
